@@ -5,9 +5,10 @@ package rst
 import "strings"
 
 const (
-	titleToken   = '='
-	sectionToken = '='
-	listToken    = '-'
+	titleToken      = '='
+	sectionToken    = '='
+	subSectionToken = '-'
+	listToken       = '-'
 )
 
 var listTokens = map[rune]struct{}{
@@ -72,6 +73,31 @@ func (s Section) String() string {
 
 	for i := 0; i < len(s.text); i++ {
 		builder.WriteString(string(sectionToken))
+	}
+
+	return builder.String()
+}
+
+type SubSection struct {
+	text string
+}
+
+func NewSubSection(text string) SubSection {
+	text = strings.TrimSpace(text)
+
+	return SubSection{
+		text: text,
+	}
+}
+
+func (s SubSection) String() string {
+	var builder strings.Builder
+
+	builder.WriteString(s.text)
+	builder.WriteString("\n")
+
+	for i := 0; i < len(s.text); i++ {
+		builder.WriteString(string(subSectionToken))
 	}
 
 	return builder.String()
