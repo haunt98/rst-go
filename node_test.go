@@ -52,6 +52,29 @@ func TestSectionString(t *testing.T) {
 	}
 }
 
+func TestSubSectionString(t *testing.T) {
+	tests := []struct {
+		name       string
+		subSection SubSection
+		want       string
+	}{
+		{
+			name: "sample section",
+			subSection: SubSection{
+				text: "sub section 1",
+			},
+			want: "sub section 1\n-------------",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := tc.subSection.String()
+			assert.Equal(t, tc.want, got)
+		})
+	}
+}
+
 func TestListItemString(t *testing.T) {
 	tests := []struct {
 		name     string
