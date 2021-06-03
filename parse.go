@@ -28,6 +28,13 @@ func Parse(lines []string) []Node {
 			}
 		}
 
+		if strings.HasSuffix(line, string(subSectionToken)) {
+			if node, ok := parseSubSection(line); ok {
+				nodes = append(nodes, node)
+				continue
+			}
+		}
+
 		isListToken := false
 		for listTok := range listTokens {
 			if strings.HasPrefix(line, string(listTok)) {
@@ -60,6 +67,15 @@ func parseSection(line string) (Section, bool) {
 	}
 
 	return NewSection(lines[0]), true
+}
+
+func parseSubSection(line string) (SubSection, bool) {
+	lines := strings.Split(line, "\n")
+	if len(lines) != 2 {
+		return SubSection{}, false
+	}
+
+	return NewSubSection(lines[0]), true
 }
 
 func parseListItem(line string) ListItem {
