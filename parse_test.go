@@ -35,6 +35,33 @@ func TestParse(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "sample with sub section",
+			lines: []string{
+				"=====\ntitle\n=====",
+				"section\n=======",
+				"sub section 1\n-------------",
+				"- item A",
+				"- item B",
+			},
+			want: []Node{
+				Title{
+					text: "title",
+				},
+				Section{
+					text: "section",
+				},
+				SubSection{
+					text: "sub section 1",
+				},
+				ListItem{
+					text: "item A",
+				},
+				ListItem{
+					text: "item B",
+				},
+			},
+		},
 	}
 
 	for _, tc := range tests {
@@ -93,6 +120,34 @@ func TestParseSection(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			gotResult, gotOK := parseSection(tc.line)
+			assert.Equal(t, tc.wantOK, gotOK)
+			if tc.wantOK {
+				assert.Equal(t, tc.wantResult, gotResult)
+			}
+		})
+	}
+}
+
+func TestParseSubSection(t *testing.T) {
+	tests := []struct {
+		name       string
+		line       string
+		wantResult SubSection
+		wantOK     bool
+	}{
+		{
+			name: "sample sub section",
+			line: "sub section\n-----------",
+			wantResult: SubSection{
+				text: "sub section",
+			},
+			wantOK: true,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			gotResult, gotOK := parseSubSection(tc.line)
 			assert.Equal(t, tc.wantOK, gotOK)
 			if tc.wantOK {
 				assert.Equal(t, tc.wantResult, gotResult)
