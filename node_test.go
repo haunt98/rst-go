@@ -59,7 +59,7 @@ func TestSubSectionString(t *testing.T) {
 		want       string
 	}{
 		{
-			name: "sample section",
+			name: "sample sub section",
 			subSection: SubSection{
 				text: "sub section 1",
 			},
